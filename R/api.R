@@ -1,7 +1,7 @@
 
-#' Obtain Drug Names From the NIM RxNorm API
+#' Get Drug Names From the NLM RxNorm API
 #'
-#' @param rxcui Either a string or numeric RxNorm RxCUI to search for.
+#' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
 #'
 #' @return A list of class \code{rxnorm} containing the following components:
 #'
@@ -12,12 +12,12 @@
 #' @export
 #'
 #' @examples
-#' search_rxcui(1011485)
-search_rxcui <- function(rxcui) {
+#' get_rx(1011485)
+get_rx <- function(rx_cui) {
   # checks
   check_internet()
   # create url
-  url <- paste0(base_url, "rxcui/", rxcui)
+  url <- paste0(base_url, "rxcui/", rx_cui)
   # get response
   res <- httr::GET(url)
   # check response status and return
