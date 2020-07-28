@@ -10,8 +10,8 @@ has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 <!-- badges: end -->
 
-Access drug names based on RxNorm CUI from the National Library of
-Medicine RxNorm RESTful API.
+> Access drug names based on RxNorm CUI from the National Library of
+> Medicine RxNorm RESTful API.
 
 ## Installation
 
