@@ -1,5 +1,5 @@
 
-#' Get Drug Names From the NLM RxNorm API
+#' Get Drug Names From RxCUI
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
 #'
@@ -26,7 +26,7 @@ get_rx <- function(rx_cui) {
   cnt
 }
 
-#' Get Drug Brand Names From the NLM RxNorm API
+#' Get Drug Brand Names From RxCUI
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
 #'
@@ -54,7 +54,23 @@ get_bn <- function(rx_cui) {
   cnt
 }
 
+#' Get WHO ATC/DDD Drug Class From RxCUI
+#'
+#' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
+#' @param query_atc TODO
+#'
+#' @return A list of class \code{rxnorm} containing the following components:
+#'
+#' \item{name}{The brand name(s); \code{NULL} if not successful or not applicable.}
+#' \item{id}{The RxNorm RxCUI(s) for the brand name; \code{NULL} if not successful or not applicable.}
+#' \item{url}{The url used for accessing the REST API.}
+#'
+#' @export
+#'
+#' @examples
+#' get_atc(1011485)
 get_atc <- function(rx_cui, query_atc = c("none", "main", "thera", "pharma", "chem")) {
+  # TODO query the WHO database for the specific drug categories
   # checks
   check_internet()
   # create url
@@ -66,25 +82,4 @@ get_atc <- function(rx_cui, query_atc = c("none", "main", "thera", "pharma", "ch
   class(cnt) <- "rxnorm"
   cnt
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

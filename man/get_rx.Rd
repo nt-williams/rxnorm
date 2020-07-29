@@ -2,7 +2,7 @@
 % Please edit documentation in R/api.R
 \name{get_rx}
 \alias{get_rx}
-\title{Get Drug Names From the NLM RxNorm API}
+\title{Get Drug Names From RxCUI}
 \usage{
 get_rx(rx_cui)
 }
@@ -17,7 +17,7 @@ A list of class \code{rxnorm} containing the following components:
 \item{url}{The url used for accessing the REST API.}
 }
 \description{
-Get Drug Names From the NLM RxNorm API
+Get Drug Names From RxCUI
 }
 \examples{
 get_rx(1011485)
