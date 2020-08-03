@@ -57,20 +57,22 @@ get_bn <- function(rx_cui) {
 #' Get WHO ATC/DDD Drug Class From RxCUI
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
-#' @param query_atc TODO
+#' @param query_atc Level to parse ATC code at. Options are "none" (default), "first",
+#'   "second", "third", "fourth".
 #'
 #' @return A list of class \code{rxnorm} containing the following components:
 #'
-#' \item{name}{The brand name(s); \code{NULL} if not successful or not applicable.}
-#' \item{id}{The RxNorm RxCUI(s) for the brand name; \code{NULL} if not successful or not applicable.}
+#' \item{name}{If \code{query_atc} is "none", the raw ATC code, otherwise the parsed ATC code; \code{NULL} if not successful or not applicable.}
+#' \item{id}{The raw ATC code if \code{query_atc} does not equal "none"; \code{NULL} otherwise.}
 #' \item{url}{The url used for accessing the REST API.}
 #'
 #' @export
 #'
 #' @examples
 #' get_atc(1011485)
-get_atc <- function(rx_cui, query_atc = c("none", "main", "thera", "pharma", "chem")) {
-  # TODO query the WHO database for the specific drug categories
+#' get_atc(1011485, "first")
+#' get_atc(1011485, "second")
+get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "fourth")) {
   # checks
   check_internet()
   # create url
@@ -78,8 +80,17 @@ get_atc <- function(rx_cui, query_atc = c("none", "main", "thera", "pharma", "ch
   # get response
   res <- httr::GET(url)
   # check response status and return
-  cnt <- parse_atc(res)
+  cnt <- parse_atc(res, match.arg(query_atc))
   class(cnt) <- "rxnorm"
   cnt
+}
+
+get_who <- function(atc, query = NULL) {
+  # create url
+  url <- paste0(who_url, atc, "&showdescription=no")
+  # get response
+  res <- httr::GET(url)
+  # check response status and return
+  parse_who(res, query)
 }
 

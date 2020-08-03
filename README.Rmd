@@ -53,3 +53,12 @@ Query the API for the [WHO ATC](https://www.whocc.no/atc_ddd_index/) drug class:
 rxnorm::get_atc(1011485)
 ```
 
+We can further parse ATC codes to varying levels of specificy:
+
+```{r}
+rxnorm::get_atc(1011485, "first")
+rxnorm::get_atc(1011485, "second")
+rxnorm::get_atc(1011485, "third")
+rxnorm::get_atc(1011485, "fourth")
+```
+

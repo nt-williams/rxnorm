@@ -52,3 +52,16 @@ drug class:
 rxnorm::get_atc(1011485)
 #> [1] "R06AE"
 ```
+
+We can further parse ATC codes to varying levels of specificy:
+
+``` r
+rxnorm::get_atc(1011485, "first")
+#> [1] "respiratory system"
+rxnorm::get_atc(1011485, "second")
+#> [1] "antihistamines for systemic use"
+rxnorm::get_atc(1011485, "third")
+#> [1] "antihistamines for systemic use"
+rxnorm::get_atc(1011485, "fourth")
+#> [1] "piperazine derivatives"
+```

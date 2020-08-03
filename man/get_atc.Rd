@@ -4,18 +4,19 @@
 \alias{get_atc}
 \title{Get WHO ATC/DDD Drug Class From RxCUI}
 \usage{
-get_atc(rx_cui, query_atc = c("none", "main", "thera", "pharma", "chem"))
+get_atc(rx_cui, query_atc = c("none", "first", "second", "third", "fourth"))
 }
 \arguments{
 \item{rx_cui}{Either a string or numeric RxNorm RxCUI to search for.}
 
-\item{query_atc}{TODO}
+\item{query_atc}{Level to parse ATC code at. Options are "none" (default), "first",
+"second", "third", "fourth".}
 }
 \value{
 A list of class \code{rxnorm} containing the following components:
 
-\item{name}{The brand name(s); \code{NULL} if not successful or not applicable.}
-\item{id}{The RxNorm RxCUI(s) for the brand name; \code{NULL} if not successful or not applicable.}
+\item{name}{If \code{query_atc} is "none", the raw ATC code, otherwise the parsed ATC code; \code{NULL} if not successful or not applicable.}
+\item{id}{The raw ATC code if \code{query_atc} does not equal "none"; \code{NULL} otherwise.}
 \item{url}{The url used for accessing the REST API.}
 }
 \description{
@@ -23,4 +24,6 @@ Get WHO ATC/DDD Drug Class From RxCUI
 }
 \examples{
 get_atc(1011485)
+get_atc(1011485, "first")
+get_atc(1011485, "second")
 }
