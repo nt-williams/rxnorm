@@ -18,9 +18,7 @@ parse_rx <- function(x) {
     res <- NULL
   }
 
-  list(name = res$idGroup$name,
-       id   = res$idGroup$rxnormId[[1]],
-       url  = x$url)
+  return(res$idGroup$name)
 }
 
 parse_bn <- function(x) {
@@ -30,29 +28,20 @@ parse_bn <- function(x) {
     res <- NULL
   }
 
-  list(name = unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties, function(x) x$name)),
-       id   = unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties, function(x) x$rxcui)),
-       url  = x$url)
+  return(unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties, function(x) x$name)))
 }
 
-parse_atc <- function(x, query) {
+parse_atc <- function(x, rx_cui, query) {
   if (!check_status(x)) {
-    list(name = NULL,
-         id   = NULL,
-         url  = x$url)
+    return(NULL)
   }
 
-  res <- httr::content(x, "parse")
-  atc <- res$rxclassDrugInfoList$rxclassDrugInfo[[1]]$rxclassMinConceptItem$classId
+  atc <- evaluate_atc_rxcui(httr::content(x, "parse"), rx_cui)
 
   if (query == "none") {
-    list(name = atc,
-         id   = NULL,
-         url  = x$url)
+    return(atc)
   } else {
-    list(name = tolower(get_who(atc, query)),
-         id   = atc,
-         url  = x$url)
+    return(tolower(get_who(atc, query)))
   }
 }
 
@@ -67,4 +56,18 @@ translate_query <- function(x) {
          second = 2,
          third = 3,
          fourth = 4)
+}
+
+evaluate_atc_rxcui <- function(res, rx_cui) {
+  check <- unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$minConcept$rxcui == rx_cui))
+
+  if (any(check)) {
+    return(res$rxclassDrugInfoList$rxclassDrugInfo[[which(check)]]$rxclassMinConceptItem$classId)
+  }
+
+  return(unlist(lapply(.$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$rxclassMinConceptItem$classId)))
+}
+
+check_common <- function(who) {
+  unique(unlist(who))
 }

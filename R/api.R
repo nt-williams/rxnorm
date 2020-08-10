@@ -3,38 +3,22 @@
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
 #'
-#' @return A list of class \code{rxnorm} containing the following components:
-#'
-#' \item{name}{The drug name; \code{NULL} if not successful.}
-#' \item{id}{The RxNorm RxCUI; \code{NULL} if not successful.}
-#' \item{url}{The url used for accessing the REST API.}
+#' @return The drug name; \code{NULL} if not successful.
 #'
 #' @export
 #'
 #' @examples
 #' get_rx(1011485)
 get_rx <- function(rx_cui) {
-  # checks
   check_internet()
-  # create url
-  url <- paste0(base_url, "rxcui/", rx_cui)
-  # get response
-  res <- httr::GET(url)
-  # check response status and return
-  cnt <- parse_rx(res)
-  class(cnt) <- "rxnorm"
-  cnt
+  parse_rx(httr::GET(paste0(base_url, "rxcui/", rx_cui)))
 }
 
 #' Get Drug Brand Names From RxCUI
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
 #'
-#' @return A list of class \code{rxnorm} containing the following components:
-#'
-#' \item{name}{The brand name(s); \code{NULL} if not successful or not applicable.}
-#' \item{id}{The RxNorm RxCUI(s) for the brand name; \code{NULL} if not successful or not applicable.}
-#' \item{url}{The url used for accessing the REST API.}
+#' @return The brand name(s); \code{NULL} if not successful or not applicable.
 #'
 #' @export
 #'
@@ -42,16 +26,8 @@ get_rx <- function(rx_cui) {
 #' get_bn(1011485)
 #' get_bn(7052)
 get_bn <- function(rx_cui) {
-  # checks
   check_internet()
-  # create url
-  url <- paste0(base_url, "rxcui/", rx_cui, "/related?tty=BN")
-  # get response
-  res <- httr::GET(url)
-  # check response status and return
-  cnt <- parse_bn(res)
-  class(cnt) <- "rxnorm"
-  cnt
+  parse_bn(httr::GET(paste0(base_url, "rxcui/", rx_cui, "/related?tty=BN")))
 }
 
 #' Get WHO ATC/DDD Drug Class From RxCUI
@@ -60,37 +36,28 @@ get_bn <- function(rx_cui) {
 #' @param query_atc Level to parse ATC code at. Options are "none" (default), "first",
 #'   "second", "third", "fourth".
 #'
-#' @return A list of class \code{rxnorm} containing the following components:
-#'
-#' \item{name}{If \code{query_atc} is "none", the raw ATC code, otherwise the parsed ATC code; \code{NULL} if not successful or not applicable.}
-#' \item{id}{The raw ATC code if \code{query_atc} does not equal "none"; \code{NULL} otherwise.}
-#' \item{url}{The url used for accessing the REST API.}
+#' @return If \code{query_atc} is "none", the raw ATC code(s), otherwise the
+#'   parsed ATC code(s); \code{NULL} if not successful.
 #'
 #' @export
 #'
 #' @examples
-#' get_atc(1011485)
-#' get_atc(1011485, "first")
-#' get_atc(1011485, "second")
+#' get_atc(861819)
+#' get_atc(6809)
+#' get_atc(861819, "first")
+#' get_atc(861819, "second")
+#' get_atc(861819, "third")
+#' get_atc(861819, "fourth")
 get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "fourth")) {
-  # checks
   check_internet()
-  # create url
-  url <- paste0(atc_url, rx_cui, "&relaSource=ATC")
-  # get response
-  res <- httr::GET(url)
-  # check response status and return
-  cnt <- parse_atc(res, match.arg(query_atc))
-  class(cnt) <- "rxnorm"
-  cnt
+  parse_atc(httr::GET(paste0(atc_url, rx_cui, "&relaSource=ATC")), rx_cui, match.arg(query_atc))
 }
 
 get_who <- function(atc, query = NULL) {
-  # create url
-  url <- paste0(who_url, atc, "&showdescription=no")
-  # get response
-  res <- httr::GET(url)
-  # check response status and return
-  parse_who(res, query)
+  out <- lapply(paste0(who_url, atc, "&showdescription=no"), function(x) {
+    parse_who(httr::GET(x), query)
+  })
+
+  check_common(out)
 }
 

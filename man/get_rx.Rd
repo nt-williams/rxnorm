@@ -10,11 +10,7 @@ get_rx(rx_cui)
 \item{rx_cui}{Either a string or numeric RxNorm RxCUI to search for.}
 }
 \value{
-A list of class \code{rxnorm} containing the following components:
-
-\item{name}{The drug name; \code{NULL} if not successful.}
-\item{id}{The RxNorm RxCUI; \code{NULL} if not successful.}
-\item{url}{The url used for accessing the REST API.}
+The drug name; \code{NULL} if not successful.
 }
 \description{
 Get Drug Names From RxCUI
