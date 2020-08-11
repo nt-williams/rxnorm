@@ -54,10 +54,19 @@ get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "f
 }
 
 get_who <- function(atc, query = NULL) {
+  if (is.null(atc) || is.na(atc)) {
+    return(NA_character_)
+  }
+
   out <- lapply(paste0(who_url, atc, "&showdescription=no"), function(x) {
     parse_who(httr::GET(x), query)
   })
 
   check_common(out)
+}
+
+get_history <- function(url, concept = NULL) {
+  check_internet()
+  parse_history(httr::GET(paste0(url, "/historystatus")), concept)
 }
 

@@ -12,42 +12,57 @@ check_status <- function(x) {
 }
 
 parse_rx <- function(x) {
-  if (check_status(x)) {
-    res <- httr::content(x, "parse")
-  } else {
-    res <- NULL
+  if (!check_status(x)) {
+    return(NA_character_)
   }
 
-  return(res$idGroup$name)
+  res <- httr::content(x, "parse")
+  check <- res$idGroup$name
+
+  if (is.null(check)) {
+    return(get_history(x$url, "name"))
+  }
+
+  check
 }
 
 parse_bn <- function(x) {
-  if (check_status(x)) {
-    res <- httr::content(x, "parse")
-  } else {
-    res <- NULL
+  if (!check_status(x)) {
+    return(NA_character_)
   }
 
-  return(unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties, function(x) x$name)))
+  res <- httr::content(x, "parse")
+  unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties, function(x) x$name))
 }
 
 parse_atc <- function(x, rx_cui, query) {
   if (!check_status(x)) {
-    return(NULL)
+    return(NA_character_)
   }
 
-  atc <- evaluate_atc_rxcui(httr::content(x, "parse"), rx_cui)
+  res <- httr::content(x, "parse")
+  atc <- evaluate_atc_rxcui(res, rx_cui)
+
+  if (is.null(atc)) {
+    new_rxcui <- get_history(paste0(base_url, "rxcui/", rx_cui), "rxcui")
+  } else {
+    new_rxcui <- NULL
+  }
+
+  if (!is.null(new_rxcui)) {
+    return(get_atc(new_rxcui[[1]], query))
+  }
 
   if (query == "none") {
-    return(atc)
-  } else {
-    return(tolower(get_who(atc, query)))
+    return(check_null(atc))
   }
+
+  return(check_null(get_who(atc, query)))
 }
 
 parse_who <- function(x, query) {
   cnt <- rvest::html_nodes(httr::content(x, "parse"), "b a")
-  rvest::html_text(cnt[[translate_query(query)]])
+  tolower(rvest::html_text(cnt[[translate_query(query)]]))
 }
 
 translate_query <- function(x) {
@@ -62,12 +77,71 @@ evaluate_atc_rxcui <- function(res, rx_cui) {
   check <- unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$minConcept$rxcui == rx_cui))
 
   if (any(check)) {
-    return(res$rxclassDrugInfoList$rxclassDrugInfo[[which(check)]]$rxclassMinConceptItem$classId)
+    return(get_matched_rxcui_atc(res, check))
   }
 
-  return(unlist(lapply(.$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$rxclassMinConceptItem$classId)))
+  return(get_unmatched_atc(res))
 }
 
 check_common <- function(who) {
   unique(unlist(who))
 }
+
+check_null <- function(x) {
+  if (is.null(x)) {
+    return(NA_character_)
+  }
+
+  return(x)
+}
+
+parse_history <- function(x, concept = NULL) {
+  if (!check_status(x)) {
+    return(NA_character_)
+  }
+
+  res <- httr::content(x, "parse")
+
+  check <- switch(concept,
+                  rxcui = get_derived_rxcui(res),
+                  name  = get_derived_name(res))
+
+  if (is.null(check) & concept == "name") {
+    return(check_null(get_historical_name(res)))
+  }
+
+  return(check)
+}
+
+get_matched_rxcui_atc <- function(res, check) {
+  unique(unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo[which(check)], function(x) x$rxclassMinConceptItem$classId)))
+}
+
+get_unmatched_atc <- function(res) {
+  unique(unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$rxclassMinConceptItem$classId)))
+}
+
+get_derived_rxcui <- function(x) {
+  check <- unlist(lapply(x$rxcuiStatusHistory$derivedConcepts$remappedConcept, function(x) x$remappedRxCui))
+
+  if (is.null(check)) {
+    check <- x$rxcuiStatusHistory$derivedConcepts$scdConcept$scdConceptRxcui
+  }
+
+  check
+}
+
+get_derived_name <- function(x) {
+  check <- x$rxcuiStatusHistory$derivedConcepts$remappedConcept[[1]]$remappedName
+
+  if (is.null(check)) {
+    check <- x$rxcuiStatusHistory$derivedConcepts$scdConcept$scdConceptName
+  }
+
+  check
+}
+
+get_historical_name <- function(x) {
+  x$rxcuiStatusHistory$attributes$name
+}
+
