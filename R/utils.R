@@ -145,3 +145,26 @@ get_historical_name <- function(x) {
   x$rxcuiStatusHistory$attributes$name
 }
 
+#' Subset WHO ATC Codes
+#'
+#' Subset ATC codes into the minimal code based on the level of query.
+#'
+#' @param atc A WHO ATC code.
+#' @param query The level to subset the code at. Options are "first" (default),
+#'  "second", "third", "fourth".
+#'
+#' @return The subsetted code.
+#' @export
+#'
+#' @examples
+#' subset_atc("R06AE", "first")
+#' subset_atc("R06AE", "second")
+subset_atc <- function(atc, query = c("first", "second", "third", "fourth")) {
+  i <- switch(match.arg(query),
+              first = c(1, 1),
+              second = c(1, 3),
+              third = c(1, 4),
+              fourth = c(1, 5))
+  check_common(substr(atc, i[1], i[2]))
+}
+

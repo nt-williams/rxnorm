@@ -53,13 +53,33 @@ get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "f
   parse_atc(httr::GET(paste0(atc_url, rx_cui, "&relaSource=ATC")), rx_cui, match.arg(query_atc))
 }
 
-get_who <- function(atc, query = NULL) {
+#' Parse WHO ATC/DDD Drug Class
+#'
+#' @param atc An WHO ATC/DDD ATC code.
+#' @param query Level to parse ATC code at. Options are "first" (default),
+#'   "second", "third", "fourth".
+#' @param subsetted Has ATC/DDD query level subsetting already occurred? The default is FALSE.
+#'
+#' @return The parsed ATC code.
+#' @export
+#'
+#' @examples
+#' get_who("R06AE")
+get_who <- function(atc,
+                    query = c("first", "second", "third", "fourth"),
+                    subsetted = FALSE) {
   if (is.null(atc) || is.na(atc)) {
     return(NA_character_)
   }
 
+  q <- match.arg(query)
+
+  if (isFALSE(subsetted)) {
+    atc <- subset_atc(atc, q)
+  }
+
   out <- lapply(paste0(who_url, atc, "&showdescription=no"), function(x) {
-    parse_who(httr::GET(x), query)
+    parse_who(httr::GET(x), q)
   })
 
   check_common(out)
@@ -69,4 +89,3 @@ get_history <- function(url, concept = NULL) {
   check_internet()
   parse_history(httr::GET(paste0(url, "/historystatus")), concept)
 }
-
