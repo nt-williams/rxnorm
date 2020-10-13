@@ -85,6 +85,19 @@ get_who <- function(atc,
   check_common(out)
 }
 
+#' Title
+#'
+#' @param ndc
+#'
+#' @return
+#' @export
+#'
+#' @examples
+from_ndc <- function(ndc) {
+  check_internet()
+  parse_ndc(httr::GET(paste0(ndc_url, ndc)))
+}
+
 get_history <- function(url, concept = NULL) {
   check_internet()
   parse_history(httr::GET(paste0(url, "/historystatus")), concept)
