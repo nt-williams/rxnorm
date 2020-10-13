@@ -1,7 +1,7 @@
 Package: rxnorm
 Type: Package
 Title: Access Drug Names from the National Library of Medicine RxNorm API
-Version: 0.1.0.9000
+Version: 0.2.0.9000
 Authors@R: person(given = "Nicholas",
              family = "Williams",
              role = c("aut", "cre", "cph"),
