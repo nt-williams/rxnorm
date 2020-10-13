@@ -33,7 +33,8 @@ parse_bn <- function(x) {
   }
 
   res <- httr::content(x, "parse")
-  unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties, function(x) x$name))
+  unlist(lapply(res$relatedGroup$conceptGroup[[1]]$conceptProperties,
+                function(x) x$name))
 }
 
 parse_atc <- function(x, rx_cui, query) {
@@ -75,7 +76,11 @@ translate_query <- function(x) {
 }
 
 evaluate_atc_rxcui <- function(res, rx_cui) {
-  check <- unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$minConcept$rxcui == rx_cui))
+  check <-
+    unlist(
+      lapply(res$rxclassDrugInfoList$rxclassDrugInfo, function(x)
+        x$minConcept$rxcui == rx_cui)
+    )
 
   if (any(check)) {
     return(get_matched_rxcui_atc(res, check))
@@ -115,15 +120,28 @@ parse_history <- function(x, concept = NULL) {
 }
 
 get_matched_rxcui_atc <- function(res, check) {
-  unique(unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo[which(check)], function(x) x$rxclassMinConceptItem$classId)))
+  unique(unlist(
+    lapply(res$rxclassDrugInfoList$rxclassDrugInfo[which(check)],
+           function(x)
+             x$rxclassMinConceptItem$classId)
+  ))
 }
 
 get_unmatched_atc <- function(res) {
-  unique(unlist(lapply(res$rxclassDrugInfoList$rxclassDrugInfo, function(x) x$rxclassMinConceptItem$classId)))
+  unique(unlist(
+    lapply(res$rxclassDrugInfoList$rxclassDrugInfo,
+           function(x)
+             x$rxclassMinConceptItem$classId)
+  ))
 }
 
 get_derived_rxcui <- function(x) {
-  check <- unlist(lapply(x$rxcuiStatusHistory$derivedConcepts$remappedConcept, function(x) x$remappedRxCui))
+  check <-
+    unlist(
+      lapply(x$rxcuiStatusHistory$derivedConcepts$remappedConcept,
+             function(x)
+               x$remappedRxCui)
+    )
 
   if (is.null(check)) {
     check <- x$rxcuiStatusHistory$derivedConcepts$scdConcept$scdConceptRxcui
@@ -133,7 +151,8 @@ get_derived_rxcui <- function(x) {
 }
 
 get_derived_name <- function(x) {
-  check <- x$rxcuiStatusHistory$derivedConcepts$remappedConcept[[1]]$remappedName
+  check <-
+    x$rxcuiStatusHistory$derivedConcepts$remappedConcept[[1]]$remappedName
 
   if (is.null(check)) {
     check <- x$rxcuiStatusHistory$derivedConcepts$scdConcept$scdConceptName
@@ -169,3 +188,17 @@ subset_atc <- function(atc, query = c("first", "second", "third", "fourth")) {
   check_common(substr(atc, i[1], i[2]))
 }
 
+parse_ndc <- function(x) {
+  if (!check_status(x)) {
+    return(NA_character_)
+  }
+
+  res <- httr::content(x, "parse")
+  check <- res$ndcStatus$rxcui
+
+  if (check == "") {
+    return(NA_character_)
+  }
+
+  check
+}
