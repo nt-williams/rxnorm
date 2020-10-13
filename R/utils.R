@@ -2,6 +2,7 @@
 base_url <- "https://rxnav.nlm.nih.gov/REST/"
 atc_url <- "https://rxnav.nlm.nih.gov/REST/rxclass/class/byRxcui.json?rxcui="
 who_url <- "https://www.whocc.no/atc_ddd_index/?code="
+ndc_url <- "https://rxnav.nlm.nih.gov/REST/ndcstatus?ndc="
 
 check_internet <- function() {
   stopifnot("No internet connection" = curl::has_internet())
