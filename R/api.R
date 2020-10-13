@@ -85,6 +85,20 @@ get_who <- function(atc,
   check_common(out)
 }
 
+#' Find Active RxNorm From NDC
+#'
+#' @param ndc An NDC code as a character string.
+#'
+#' @return If found, the active RxNorm RxCUI. Otherwise, \code{NA}.
+#' @export
+#'
+#' @examples
+#' from_ndc("00002143301")
+from_ndc <- function(ndc) {
+  check_internet()
+  parse_ndc(httr::GET(paste0(ndc_url, ndc)))
+}
+
 get_history <- function(url, concept = NULL) {
   check_internet()
   parse_history(httr::GET(paste0(url, "/historystatus")), concept)
