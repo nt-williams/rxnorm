@@ -33,8 +33,8 @@ get_bn <- function(rx_cui) {
 #' Get WHO ATC/DDD Drug Class From RxCUI
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
-#' @param query_atc Level to parse ATC code at. Options are "none" (default), "first",
-#'   "second", "third", "fourth".
+#' @param query_atc Level to parse ATC code at. Options are "none" (default), "first", "second", "third", "fourth".
+#' @param prod Return product level ATC? Set to \code{FALSE} to return ATC codes for ingredients.
 #'
 #' @return If \code{query_atc} is "none", the raw ATC code(s), otherwise the
 #'   parsed ATC code(s); \code{NULL} if not successful.
@@ -48,9 +48,10 @@ get_bn <- function(rx_cui) {
 #' get_atc(861819, "second")
 #' get_atc(861819, "third")
 #' get_atc(861819, "fourth")
-get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "fourth")) {
+get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "fourth"), prod = TRUE) {
   check_internet()
-  parse_atc(httr::GET(paste0(atc_url, rx_cui, "&relaSource=ATC")), rx_cui, match.arg(query_atc))
+  rela <- ifelse(prod, "ATCPROD", "ATC")
+  parse_atc(httr::GET(paste0(atc_url, rx_cui, paste0("&relaSource=", rela))), rx_cui, match.arg(query_atc))
 }
 
 #' Parse WHO ATC/DDD Drug Class

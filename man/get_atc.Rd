@@ -4,13 +4,18 @@
 \alias{get_atc}
 \title{Get WHO ATC/DDD Drug Class From RxCUI}
 \usage{
-get_atc(rx_cui, query_atc = c("none", "first", "second", "third", "fourth"))
+get_atc(
+  rx_cui,
+  query_atc = c("none", "first", "second", "third", "fourth"),
+  prod = TRUE
+)
 }
 \arguments{
 \item{rx_cui}{Either a string or numeric RxNorm RxCUI to search for.}
 
-\item{query_atc}{Level to parse ATC code at. Options are "none" (default), "first",
-"second", "third", "fourth".}
+\item{query_atc}{Level to parse ATC code at. Options are "none" (default), "first", "second", "third", "fourth".}
+
+\item{prod}{Return product level ATC? Set to \code{FALSE} to return ATC codes for ingredients.}
 }
 \value{
 If \code{query_atc} is "none", the raw ATC code(s), otherwise the

@@ -1,13 +1,13 @@
 Package: rxnorm
 Type: Package
-Title: Access Drug Names from the National Library of Medicine RxNorm API
-Version: 0.2.0.9000
+Title: Access Drug Names and Class from the National Library of Medicine RxNorm API
+Version: 0.2.1.9000
 Authors@R: person(given = "Nicholas",
              family = "Williams",
              role = c("aut", "cre", "cph"),
              email = "niw4001@med.cornell.edu", 
              comment = c(ORCID = "0000-0002-1378-4831"))
-Description: Provides drug names based on the RxNorm CUI from the National 
+Description: Provides drug names and class based on the RxNorm CUI from the National 
   Library of Medicines RxNorm RESTful API <https://rxnav.nlm.nih.gov/RxNormAPIs.html#>.
 Encoding: UTF-8
 LazyData: true
@@ -15,5 +15,5 @@ Imports:
     httr,
     curl,
     rvest
-RoxygenNote: 7.1.0
+RoxygenNote: 7.2.1
 License: GPL-3
