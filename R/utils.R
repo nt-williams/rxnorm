@@ -202,3 +202,8 @@ parse_ndc <- function(x) {
 
   check
 }
+
+check_null <- function(x) {
+  if (is.null(x)) return(NA_character_)
+  x
+}

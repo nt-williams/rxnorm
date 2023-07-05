@@ -4,9 +4,9 @@
 \name{rxnorm-package}
 \alias{rxnorm}
 \alias{rxnorm-package}
-\title{rxnorm: Access Drug Names from the National Library of Medicine RxNorm API}
+\title{rxnorm: Access Drug Names and Class from the National Library of Medicine RxNorm API}
 \description{
-Provides drug names based on the RxNorm CUI from the National Library of Medicines RxNorm RESTful API \url{https://rxnav.nlm.nih.gov/RxNormAPIs.html#}.
+Provides drug names and class based on the RxNorm CUI from the National Library of Medicines RxNorm RESTful API \url{https://rxnav.nlm.nih.gov/RxNormAPIs.html#}.
 }
 \author{
 \strong{Maintainer}: Nicholas Williams \email{niw4001@med.cornell.edu} (\href{https://orcid.org/0000-0002-1378-4831}{ORCID}) [copyright holder]

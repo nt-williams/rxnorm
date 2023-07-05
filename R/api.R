@@ -11,7 +11,7 @@
 #' get_rx(1011485)
 get_rx <- function(rx_cui) {
   check_internet()
-  parse_rx(httr::GET(paste0(base_url, "rxcui/", rx_cui)))
+  check_null(parse_rx(httr::GET(paste0(base_url, "rxcui/", rx_cui))))
 }
 
 #' Get Drug Brand Names From RxCUI
@@ -27,7 +27,7 @@ get_rx <- function(rx_cui) {
 #' get_bn(7052)
 get_bn <- function(rx_cui) {
   check_internet()
-  parse_bn(httr::GET(paste0(base_url, "rxcui/", rx_cui, "/related?tty=BN")))
+  check_null(parse_bn(httr::GET(paste0(base_url, "rxcui/", rx_cui, "/related?tty=BN"))))
 }
 
 #' Get WHO ATC/DDD Drug Class From RxCUI
@@ -51,7 +51,7 @@ get_bn <- function(rx_cui) {
 get_atc <- function(rx_cui, query_atc = c("none", "first", "second", "third", "fourth"), prod = TRUE) {
   check_internet()
   rela <- ifelse(prod, "ATCPROD", "ATC")
-  parse_atc(httr::GET(paste0(atc_url, rx_cui, paste0("&relaSource=", rela))), rx_cui, match.arg(query_atc))
+  check_null(parse_atc(httr::GET(paste0(atc_url, rx_cui, paste0("&relaSource=", rela))), rx_cui, match.arg(query_atc)))
 }
 
 #' Parse WHO ATC/DDD Drug Class
@@ -83,7 +83,7 @@ get_who <- function(atc,
     parse_who(httr::GET(x), q)
   })
 
-  check_common(out)
+  check_null(check_common(out))
 }
 
 #' Find Active RxNorm From NDC
@@ -97,10 +97,10 @@ get_who <- function(atc,
 #' from_ndc("00002143301")
 from_ndc <- function(ndc) {
   check_internet()
-  parse_ndc(httr::GET(paste0(ndc_url, ndc)))
+  check_null(parse_ndc(httr::GET(paste0(ndc_url, ndc))))
 }
 
 get_history <- function(url, concept = NULL) {
   check_internet()
-  parse_history(httr::GET(paste0(url, "/historystatus")), concept)
+  check_null(parse_history(httr::GET(paste0(url, "/historystatus")), concept))
 }
