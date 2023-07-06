@@ -2,7 +2,7 @@
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
 #' @param query_atc Level to parse ATC code at. Options are "none" (default), "first", "second", "third", "fourth".
-#' @param local_host
+#' @param local_host Run query locally using RxNav-in-a-box with Docker?
 #'
 #' @return If \code{query_atc} is "none", the raw ATC code(s), otherwise the
 #'   parsed ATC code(s); \code{NULL} if not successful.

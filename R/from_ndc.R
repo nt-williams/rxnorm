@@ -1,7 +1,7 @@
 #' Find Active RxNorm From NDC
 #'
 #' @param ndc An NDC code as a character string.
-#' @param local_host
+#' @param local_host Run query locally using RxNav-in-a-box with Docker?
 #'
 #' @return If found, the active RxNorm RxCUI. Otherwise, \code{NA}.
 #' @export
@@ -24,4 +24,3 @@ parse_ndc <- function(x) {
 }
 
 filter_ndcStatus_rxcui <- function(x) x$ndcStatus$rxcui
-

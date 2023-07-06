@@ -1,7 +1,7 @@
 #' Get Drug Brand Names From RxCUI
 #'
 #' @param rx_cui Either a string or numeric RxNorm RxCUI to search for.
-#' @param local_host
+#' @param local_host Run query locally using RxNav-in-a-box with Docker?
 #'
 #' @return The brand name(s); \code{NA_character_} if not successful or not applicable.
 #'

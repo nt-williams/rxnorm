@@ -49,9 +49,8 @@ translate_query <- function(x) {
 #'
 #' Subset ATC codes into the minimal code based on the level of query.
 #'
-#' @param atc A WHO ATC code.
-#' @param query The level to subset the code at. Options are "first" (default),
-#'  "second", "third", "fourth".
+#' @param atc WHO ATC code.
+#' @param query The level to subset the code at. Options are "first" (default), "second", "third", "fourth".
 #'
 #' @return The subsetted code.
 #' @export
