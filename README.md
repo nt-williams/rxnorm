@@ -31,37 +31,41 @@ devtools::install_github("nt-williams/rxnorm")
 
 ## Example
 
+``` r
+library(rxnorm)
+```
+
 Query the API for the RxNorm name:
 
 ``` r
-rxnorm::get_rx(1011485)
+get_rx(1011485)
 #> [1] "cetirizine hydrochloride 10 MG Disintegrating Oral Tablet [Zyrtec]"
 ```
 
 Query the API for the brand name:
 
 ``` r
-rxnorm::get_bn(1011485)
-#> [1] "Zyrtec"
+get_bn(1011485)
+#> [1] "ZYRTEC"
 ```
 
 Query the API for the [WHO ATC](https://www.whocc.no/atc_ddd_index/)
 drug class:
 
 ``` r
-rxnorm::get_atc(1011485)
+get_atc(1011485)
 #> [1] "R06AE"
 ```
 
 We can further parse ATC codes to varying levels of specificy:
 
 ``` r
-rxnorm::get_atc(1011485, "first")
+get_atc(1011485, "first")
 #> [1] "respiratory system"
-rxnorm::get_atc(1011485, "second")
+get_atc(1011485, "second")
 #> [1] "antihistamines for systemic use"
-rxnorm::get_atc(1011485, "third")
+get_atc(1011485, "third")
 #> [1] "antihistamines for systemic use"
-rxnorm::get_atc(1011485, "fourth")
+get_atc(1011485, "fourth")
 #> [1] "piperazine derivatives"
 ```
