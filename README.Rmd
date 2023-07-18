@@ -51,6 +51,13 @@ Query the API for the brand name:
 get_bn(1011485)
 ```
 
+Query the API for the strength of active ingredients:
+
+```{r}
+get_rxcui_strength(861819)
+```
+
+
 Query the API for the [WHO ATC](https://www.whocc.no/atc_ddd_index/) drug class:
 
 ```{r}
