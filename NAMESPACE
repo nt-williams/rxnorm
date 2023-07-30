@@ -3,6 +3,7 @@
 export(from_ndc)
 export(get_atc)
 export(get_bn)
+export(get_dose_form)
 export(get_ndc_status)
 export(get_remapped_rxcui)
 export(get_rx)
