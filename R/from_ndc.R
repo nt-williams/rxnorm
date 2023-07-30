@@ -11,16 +11,16 @@
 from_ndc <- function(ndc, local_host = FALSE) {
   check_internet()
   url <- create_url(local_host, path_ndc, ndc = ndc)
-  parse_ndc(httr::GET(url))
+  parse_ndc(httr::GET(url), "rxcui")
 }
 
 path_ndc <- "REST/ndcstatus"
 
-parse_ndc <- function(x) {
+parse_ndc <- function(x, param) {
   if (!check_status(x)) return(NA_character_)
-  res <- filter_ndcStatus_rxcui(httr::content(x, "parse"))
+  res <- filter_ndcStatus(httr::content(x, "parse"), param)
   if (res == "") return(NA_character_)
   res
 }
 
-filter_ndcStatus_rxcui <- function(x) x$ndcStatus$rxcui
+filter_ndcStatus <- function(x, param) x$ndcStatus[[param]]

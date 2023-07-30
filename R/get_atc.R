@@ -32,8 +32,6 @@ parse_atc <- function(x, rx_cui, relasource, query) {
   res <- httr::content(x, "parse")$rxclassDrugInfoList$rxclassDrugInfo
   atc <- eval_atc_query(res, rx_cui, relasource)
 
-  if (is.na(atc)) return(NA_character_)
-
   if (query == "none") {
     return(atc)
   }
@@ -45,6 +43,19 @@ eval_atc_query <- function(from_api, rx_cui, relasource) {
   res <- filter_rxclassDrugInfo_rxcui(from_api, rx_cui) |>
     filter_rxClassDrugInfo_relaSource("ATCPROD")
 
+  if (length(res) == 0) {
+    res <- filter_rxclassDrugInfo_rxcui(from_api, rx_cui) |>
+      filter_rxClassDrugInfo_relaSource("ATC")
+  }
+
+  if (length(res) == 0) {
+    res <- filter_rxClassDrugInfo_relaSource(from_api, "ATCPROD")
+  }
+
+  if (length(res) == 0) {
+    res <- filter_rxClassDrugInfo_relaSource(from_api, "ATC")
+  }
+
   if (length(res) == 0) return(NA_character_)
 
   sapply(res, function(x) x$rxclassMinConceptItem$classId)
@@ -55,5 +66,6 @@ filter_rxclassDrugInfo_rxcui <- function(rxclassDrugInfo, rxcui) {
 }
 
 filter_rxClassDrugInfo_relaSource <- function(rxclassDrugInfo, relaSource) {
+  if (length(rxclassDrugInfo) == 0) return(list())
   rxclassDrugInfo[sapply(rxclassDrugInfo, function(x) x$relaSource == relaSource)]
 }

@@ -49,6 +49,18 @@ get_bn(1011485)
 #> [1] "ZYRTEC"
 ```
 
+Query the API for the strength of active ingredients:
+
+``` r
+get_rxcui_strength(861819)
+#>      activeIngredientName numeratorValue numeratorUnit denominatorValue
+#> 1   sitagliptin phosphate             50            MG                1
+#> 2 metformin hydrochloride            500            MG                1
+#>   denominatorUnit
+#> 1            EACH
+#> 2            EACH
+```
+
 Query the API for the [WHO ATC](https://www.whocc.no/atc_ddd_index/)
 drug class:
 
