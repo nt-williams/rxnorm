@@ -19,3 +19,14 @@ parse_rx <- function(x) {
   if (!check_status(x)) return(NA_character_)
   httr::content(x, "parse")$rxcuiStatusHistory$attributes$name
 }
+
+get_rx_ndc <- function(ndc, local_host = FALSE) {
+  check_internet()
+  url <- create_url(local_host, path_ndc, ndc = ndc)
+  check_null(parse_rx_ndc(httr::GET(url)))
+}
+
+parse_rx_ndc <- function(x) {
+  if (!check_status(x)) return(NA_character_)
+  httr::content(x, "parse")$ndcStatus$conceptName
+}

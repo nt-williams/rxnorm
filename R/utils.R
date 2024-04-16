@@ -15,7 +15,6 @@ create_url <- function(local, path, ...) {
       url$query[[x]] <- query[[x]]
     }
   }
-
   httr::build_url(url)
 }
 

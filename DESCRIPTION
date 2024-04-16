@@ -15,5 +15,5 @@ Imports:
     httr,
     curl,
     rvest
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 License: GPL-3

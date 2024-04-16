@@ -13,7 +13,11 @@
 get_who <- function(atc,
                     query = c("first", "second", "third", "fourth"),
                     subsetted = FALSE) {
-  if (is.null(atc) || is.na(atc)) {
+  if (is.null(atc)) {
+    return(NA_character_)
+  }
+
+  if (length(atc) == 1 && is.na(atc)) {
     return(NA_character_)
   }
 
