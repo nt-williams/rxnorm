@@ -69,7 +69,6 @@ parse_rxcui_quantified <- function(x) {
 get_scd_rxcui <- function(rx_cui, local_host = FALSE) {
   check_internet()
   url <- create_url(local_host, paste0("REST/rxcui/", rx_cui, "/historystatus"))
-  browser()
   check_null(parse_rxcui_scd(httr::GET(url)))
 }
 
